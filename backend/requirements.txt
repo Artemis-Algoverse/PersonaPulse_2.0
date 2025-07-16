@@ -1,0 +1,6 @@
+psycopg2-binary
+apscheduler
+python-dotenv
+requests
+beautifulsoup4
+selenium

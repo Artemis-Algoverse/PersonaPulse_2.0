@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Flask==2.3.3
 Flask-SQLAlchemy==3.0.5
 Flask-CORS==4.0.0
@@ -8,3 +9,11 @@ APScheduler==3.10.4
 requests==2.31.0
 beautifulsoup4==4.12.2
 pandas==2.0.3
+=======
+psycopg2-binary
+apscheduler
+python-dotenv
+requests
+beautifulsoup4
+selenium
+>>>>>>> 45b4459130aba403532d1b74a1ae2367f6d07130

@@ -1,25 +1,32 @@
 
 import logging
+import asyncio
 from fetch_devpost import fetch_devpost
 from fetch_eventbrite import fetch_eventbrite
-from fetch_mygov import fetch_mygov
-from fetch_ignca import fetch_ignca
-from fetch_indiahabitat import fetch_indiahabitat
+from fetch_meraevents import fetch_meraevents
 
-def fetch_all_events():
+async def fetch_all_events_async():
     all_events = []
-    for fetcher, name in [
-        (fetch_devpost, "Devpost"),
-        (fetch_eventbrite, "Eventbrite"),
-        (fetch_mygov, "MyGov"),
-        (fetch_ignca, "IGNCA"),
-        (fetch_indiahabitat, "IndiaHabitat")
-    ]:
+    fetchers = [
+        (fetch_devpost, "Devpost", False),
+        (fetch_eventbrite, "Eventbrite", True),
+        (fetch_meraevents, "MeraEvents", True)
+    ]
+    tasks = []
+    for fetcher, name, is_async in fetchers:
         logging.info(f"Fetching events from {name}...")
-        try:
-            events = fetcher()
+        if is_async:
+            tasks.append(fetcher())
+        else:
+            # Wrap sync fetcher for asyncio
+            loop = asyncio.get_event_loop()
+            tasks.append(loop.run_in_executor(None, fetcher))
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    for idx, (fetcher, name, _) in enumerate(fetchers):
+        events = results[idx]
+        if isinstance(events, Exception):
+            logging.error(f"Error fetching from {name}: {events}")
+        else:
             logging.info(f"Fetched {len(events)} events from {name}.")
             all_events.extend(events)
-        except Exception as ex:
-            logging.error(f"Error fetching from {name}: {ex}")
     return all_events

@@ -4,31 +4,29 @@ from datetime import datetime
 import logging
 
 def fetch_devpost():
-    url = "https://devpost.com/hackathons?search=india"
+    url = "https://devpost.com/api/hackathons?challenge_type=all&sort_by=submission_deadline&page=1"
     headers = {"User-Agent": "Mozilla/5.0"}
     try:
         resp = requests.get(url, timeout=10, headers=headers)
-        print("Devpost response sample:", resp.text[:1000])
+        print("Devpost API response sample:", resp.text[:1000])
         if resp.status_code != 200 or not resp.text:
             logging.warning(f"Devpost: Bad response {resp.status_code}")
             return []
-        soup = BeautifulSoup(resp.text, "html.parser")
+        data = resp.json()
         events = []
-        for card in soup.select(".challenge-card-wrapper, .hackathon-card"):
-            title = card.select_one(".challenge-title, .title").get_text(strip=True) if card.select_one(".challenge-title, .title") else None
-            link = card.select_one("a[href]")['href'] if card.select_one("a[href]") else None
-            if link and not link.startswith("http"):
-                link = "https://devpost.com" + link
-            date_time = card.select_one(".challenge-date, .date").get_text(strip=True) if card.select_one(".challenge-date, .date") else None
-            location = card.select_one(".challenge-location, .location").get_text(strip=True) if card.select_one(".challenge-location, .location") else "Online"
-            is_online = "online" in location.lower()
+        for hack in data.get('hackathons', []):
+            title = hack.get('title')
+            link = hack.get('url')
+            date_time = hack.get('submission_deadline')
+            location = hack.get('location', 'Online')
+            is_online = 'online' in location.lower()
             is_free = True
             is_paid = False
-            attending_count = 0
-            keywords = title.split() if title else []
+            attending_count = hack.get('participants_count', 0)
+            keywords = hack.get('tags', [])
             platform = "Devpost"
             try:
-                dt = datetime.strptime(date_time, "%b %d, %Y") if date_time else None
+                dt = datetime.fromisoformat(date_time) if date_time else None
             except:
                 dt = None
             event = {

@@ -25,7 +25,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # Enable CORS for frontend integration
-    CORS(app, origins=['http://localhost:5173', 'http://localhost:3000'])
+    CORS(app, origins=['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:3000'])
     
     # Initialize database
     db.init_app(app)
@@ -50,6 +50,16 @@ def create_app():
                 'GET /api/scheduler/status': 'Get scheduler job status',
                 'POST /api/scheduler/start': 'Start scheduled updates'
             }
+        })
+    
+    @app.route('/api/health', methods=['GET'])
+    def health_check():
+        """Health check endpoint for frontend connection testing"""
+        return jsonify({
+            'status': 'healthy',
+            'message': 'PersonaPulse API is running',
+            'version': '1.0',
+            'timestamp': os.path.getmtime(__file__)
         })
     
     @app.route('/api/users', methods=['POST'])

@@ -13,7 +13,7 @@ class DataScheduler:
     def __init__(self, app):
         self.app = app
         self.scheduler = BackgroundScheduler()
-        self.analyzer = PersonalityAnalyzer(Config.GEMINI_API_KEY)
+        self.analyzer = PersonalityAnalyzer()
         
         # Initialize scrapers
         self.scrapers = {

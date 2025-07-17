@@ -32,23 +32,10 @@ PersonaPulse 2.0 Architecture:
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.8+
-- Node.js 16+
-- Google Gemini API Key only (no social media API keys required)
+- Python 3.8+ (with pip)
+- Node.js 16+ (with npm)
+- Google Gemini API Key (get from [Google AI Studio](https://makersuite.google.com/app/apikey))
 - SQLite database (included with Python)
-
-### One-Command Setup
-
-**Windows:**
-```bash
-setup_all.bat
-```
-
-**Unix/Linux/Mac:**
-```bash
-chmod +x setup_all.sh
-./setup_all.sh
-```
 
 ### Manual Setup
 
@@ -62,8 +49,10 @@ chmod +x setup_all.sh
    ```bash
    cd backend
    pip install -r requirements.txt
-   cp .env.example .env
-   # Edit .env with your Gemini API key
+   # Copy and configure environment variables
+   copy .env.example .env
+   # Edit .env and add your Gemini API key from https://makersuite.google.com/app/apikey
+   # Start the backend server
    python app.py
    ```
 

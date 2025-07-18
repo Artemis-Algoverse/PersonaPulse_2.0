@@ -1,3 +1,4 @@
+import './Dashboard.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -113,17 +114,17 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <nav className="dashboard-nav" style={{justifyContent:'center'}}>
-        <div className="nav-brand" style={{textAlign:'center', width:'100%'}}>
+      <nav className="dashboard-nav">
+        <div className="nav-brand">
           <h2>PersonaPulse</h2>
         </div>
-        <div className="nav-user" style={{textAlign:'center', width:'100%'}}>
+        <div className="nav-user">
           <span>Welcome, {user.name}</span>
           <button onClick={handleLogout} className="btn btn-secondary">Logout</button>
         </div>
       </nav>
 
-      <div className="dashboard-header" style={{textAlign:'center', width:'100%'}}>
+      <div className="dashboard-header">
         <h1>Your Personality Profile</h1>
         <p>Discover insights about yourself and find perfect matches</p>
       </div>
@@ -133,7 +134,7 @@ const Dashboard = () => {
           className={`tab-button ${activeTab === 'profile' ? 'active' : ''}`}
           onClick={() => setActiveTab('profile')}
         >
-          Personality Profile
+          Profile
         </button>
         <button 
           className={`tab-button ${activeTab === 'recommendations' ? 'active' : ''}`}
@@ -207,7 +208,7 @@ const Dashboard = () => {
 
             <div className="profile-card">
               <h2>Extracted Keywords from Your Profile</h2>
-              <div style={{marginTop:'1rem', fontWeight:'bold', color:'#a18cd1'}}>
+              <div style={{marginTop:'1rem', fontWeight:'bold'}}>
                 {extractedKeywords ? extractedKeywords : 'No keywords found.'}
               </div>
             </div>
@@ -232,9 +233,22 @@ const Dashboard = () => {
                   <div className="card-content">
                     <p className="event-description">{rec.description}</p>
                     <p className="event-keywords"><b>Keywords:</b> {rec.keywords}</p>
+                    <div className="event-details">
+                      <span className="event-date">📅 {rec.date_time ? rec.date_time : <span style={{color:'#ffb6b9'}}>Date N/A</span>}</span>
+                      <span className="event-location">📍 {rec.location ? rec.location : <span style={{color:'#ffb6b9'}}>Location N/A</span>}</span>
+                    </div>
                   </div>
                   <div className="card-actions">
-                    <button className="btn btn-primary">Learn More</button>
+                    <a
+                      href={rec.link ? rec.link : `https://www.google.com/search?q=${encodeURIComponent(rec.title || 'event')}`}
+                      className="event-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <button className="btn btn-primary">
+                        {rec.link ? 'Learn More' : 'Find Event'}
+                      </button>
+                    </a>
                   </div>
                 </div>
               ))}

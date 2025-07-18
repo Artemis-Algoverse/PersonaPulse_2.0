@@ -1,78 +1,94 @@
-* {
+/* Minimalistic, flat, sober global app styles */
+body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  font-family: 'Inter', Arial, sans-serif;
+  background: #fff;
+  color: #000;
 }
-
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 50%, #fcb69f 100%);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: url('https://cdn.jsdelivr.net/gh/Artemis-Algoverse/personapulse-cursors/pulse-cursor.png'), auto;
-  transition: background 0.5s;
-}
-
-.App {
-  min-height: 100vh;
-}
-
-.btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
+a {
+  color: #ff9966;
   text-decoration: none;
-  display: inline-block;
-  text-align: center;
+}
+a:hover {
+  text-decoration: underline;
+}
+  background: none;
+  box-shadow: none;
 }
 
-.btn-primary {
-  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-  color: white;
+.profile-card, .insight-card, .dominant-trait, .social-item {
+  background: none;
+  box-shadow: none;
+  border: none;
 }
 
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.card-header h3, .card-content p, .event-details, .event-keywords, .score-value, .trait-info, .trait-bar, .trait-fill, .trait-score, .insight-item h4 {
+  background: none;
+  box-shadow: none;
+  border: none;
 }
-
-.dashboard {
-  min-height: 100vh;
+.recommendation-card {
+  background: rgba(255,255,255,0.7);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px 0 rgba(161,140,209,0.15);
   padding: 2rem;
-  color: white;
+  text-align: left;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 2px solid #a18cd1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  gap: 0.5rem;
 }
-
-.dashboard-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  width: 100%;
+.recommendation-card:hover {
+  transform: scale(1.04) translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(255, 153, 102, 0.18);
+  border-color: #ff9966;
+  cursor: pointer;
+  animation: pulse 0.7s;
 }
-
-.dashboard-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  background: linear-gradient(90deg, #a18cd1, #fbc2eb, #fcb69f);
+.recommendation-card h3 {
+  background: linear-gradient(90deg, #a18cd1, #ffb6b9, #ff9966);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
+.event-details {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.98rem;
+  color: #a18cd1;
+}
+.event-keywords {
+  color: #ff9966;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+.card-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.btn-primary {
+  background: linear-gradient(90deg, #ff9966 0%, #a18cd1 100%);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 0.7rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(255, 182, 185, 0.08);
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, #a18cd1 0%, #ff9966 100%);
+  box-shadow: 0 4px 16px rgba(255, 182, 185, 0.18);
 
-.profile-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
@@ -110,7 +126,7 @@ body {
 
 .trait-fill {
   height: 100%;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  background: linear-gradient(90deg, #ff9966 0%, #a18cd1 100%);
   transition: width 0.3s ease;
 }
 
@@ -120,90 +136,13 @@ body {
   gap: 1rem;
 }
 
-.recommendation-card {
-  background: rgba(255,255,255,0.15);
-  border-radius: 18px;
-  box-shadow: 0 8px 32px 0 rgba(161,140,209,0.15);
-  padding: 2rem;
-  text-align: center;
-  transition: transform 0.3s, box-shadow 0.3s;
-  border: 1px solid rgba(251,194,235,0.2);
-}
-.recommendation-card:hover {
-  transform: scale(1.04) translateY(-4px);
-  box-shadow: 0 12px 40px 0 rgba(252,182,159,0.18);
-  cursor: pointer;
-  animation: pulse 0.7s;
-}
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(252,182,159,0.7); }
-  70% { box-shadow: 0 0 20px 10px rgba(252,182,159,0.1); }
-  100% { box-shadow: 0 0 0 0 rgba(252,182,159,0); }
-}
 
-.recommendation-card h3 {
-  color: #4ecdc4;
-  margin-bottom: 0.5rem;
-}
-
-.event-type {
-  color: #ff6b6b;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-.match-score {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #4ecdc4;
-  margin-bottom: 0.5rem;
-}
-
-.reason {
-  opacity: 0.8;
-  margin-bottom: 1rem;
-}
-
-.loading-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-align: center;
-}
-
-.loading-content {
-  max-width: 400px;
-  width: 100%;
-}
-
-.loading-content h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.progress-container {
-  width: 400px;
-  margin: 2rem 0;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  overflow: hidden;
-}
 
 .progress-fill {
-  height: 100%;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  height: 16px;
+  background: linear-gradient(90deg, #ff9966 0%, #a18cd1 100%);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(161,140,209,0.15);
   transition: width 0.3s ease;
 }
 
@@ -226,7 +165,7 @@ body {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #4ecdc4;
+  background: #a18cd1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -235,11 +174,11 @@ body {
 }
 
 .step-icon.completed {
-  background: #4ecdc4;
+  background: #a18cd1;
 }
-
+  background: none;
 .step-icon.current {
-  background: #ff6b6b;
+  background: #ff9966;
 }
 
 @media (max-width: 768px) {
@@ -252,7 +191,7 @@ body {
 .landing-page {
   min-height: 100vh;
   color: white;
-}
+  background: none;
 
 .navbar {
   display: flex;
@@ -260,14 +199,14 @@ body {
   align-items: center;
   padding: 1rem 2rem;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: none;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
 .logo {
-  font-size: 1.8rem;
+  background: none;
   font-weight: bold;
   color: white;
   background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
@@ -278,7 +217,7 @@ body {
 
 .nav-buttons {
   display: flex;
-  gap: 1rem;
+  background: none;
 }
 
 .btn-secondary {
@@ -287,7 +226,7 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-.btn-large {
+  background: none;
   padding: 1rem 2rem;
   font-size: 1.1rem;
 }
@@ -295,7 +234,7 @@ body {
 .hero {
   text-align: center;
   padding: 6rem 2rem;
-  max-width: 1200px;
+  background: none;
   margin: 0 auto;
 }
 
@@ -305,20 +244,20 @@ body {
   background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background: none;
   font-weight: 700;
 }
 
 .hero p {
   font-size: 1.3rem;
   margin-bottom: 2.5rem;
-  opacity: 0.9;
+  background: none;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
 }
-
+  background: none;
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -328,41 +267,67 @@ body {
   margin: 0 auto;
 }
 
-.feature-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2.5rem;
-  border-radius: 16px;
-  text-align: center;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease;
+.recommendation-card {
+  background: rgba(255,255,255,0.7);
+  background: none;
+  box-shadow: 0 8px 32px 0 rgba(161,140,209,0.15);
+  padding: 2rem;
+  text-align: left;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 2px solid #a18cd1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
-
-.feature-card:hover {
-  transform: translateY(-5px);
+.recommendation-card:hover {
+  background: none;
+  box-shadow: 0 12px 40px 0 rgba(255, 153, 102, 0.18);
+  border-color: #ff9966;
+  cursor: pointer;
+  animation: pulse 0.7s;
 }
-
-.feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+.recommendation-card h3 {
+  background: linear-gradient(90deg, #a18cd1, #ffb6b9, #ff9966);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
-
-.feature-card h3 {
-  margin-bottom: 1rem;
-  color: #4ecdc4;
-  font-size: 1.4rem;
+.event-details {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.98rem;
+  color: #a18cd1;
 }
-
-.feature-card p {
-  opacity: 0.9;
-  line-height: 1.6;
+.event-keywords {
+  color: #ff9966;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
 }
-
-.how-it-works {
-  padding: 6rem 2rem;
-  text-align: center;
-  max-width: 1200px;
-  margin: 0 auto;
+.card-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.btn-primary {
+  background: linear-gradient(90deg, #ff9966 0%, #a18cd1 100%);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 0.7rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(255, 182, 185, 0.08);
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, #a18cd1 0%, #ff9966 100%);
+  box-shadow: 0 4px 16px rgba(255, 182, 185, 0.18);
+}
 }
 
 .how-it-works h2 {
@@ -569,7 +534,10 @@ body {
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
-}
+        background: linear-gradient(90deg, #ff9966 0%, #a18cd1 100%);
+        height: 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(161,140,209,0.15);
 
 .form-group input:focus {
   outline: none;
@@ -590,7 +558,7 @@ body {
 
 .social-media-section p {
   color: #666;
-  margin-bottom: 1rem;
+    background: #a18cd1;
 }
 
 .form-footer {
@@ -599,17 +567,14 @@ body {
 }
 
 .link-button {
-  background: none;
+    background: #a18cd1;
   border: none;
   color: #667eea;
   cursor: pointer;
-  text-decoration: underline;
+    background: #ff9966;
   margin-left: 0.5rem;
 }
 
-.link-button:hover {
-  color: #4c63d2;
-}
 
 /* Dashboard Styles */
 .dashboard-nav {
@@ -617,6 +582,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
+  background: linear-gradient(45deg, #ff6b6b, #a18cd1);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -640,12 +606,16 @@ body {
   gap: 1rem;
   color: white;
 }
-
 .dashboard-tabs {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin: 2rem 0;
+}
+.dashboard-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+    background: #a18cd1;
 }
 
 .tab-button {
@@ -685,7 +655,7 @@ body {
 
 .score-value {
   font-weight: bold;
-  color: #4ecdc4;
+  color: #a74ecd;
 }
 
 .social-profiles {
@@ -717,7 +687,7 @@ body {
 }
 
 .match-badge {
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  background: linear-gradient(45deg, #ff8b6b, #9a4ecd);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
@@ -784,7 +754,7 @@ body {
 }
 
 .insight-item h4 {
-  color: #4ecdc4;
+  color: #ab4ecd;
   margin-bottom: 0.5rem;
 }
 
@@ -818,7 +788,7 @@ body {
 
 .step-item.current {
   background: rgba(255, 107, 107, 0.1);
-  border-left: 3px solid #ff6b6b;
+  border-left: 3px solid #ff8b6b;
 }
 
 .step-content {
@@ -841,7 +811,7 @@ body {
 .loader-dots span {
   width: 6px;
   height: 6px;
-  background: #4ecdc4;
+  background: #af4ecd;
   border-radius: 50%;
   animation: loader-bounce 1.4s infinite ease-in-out;
 }
@@ -863,7 +833,7 @@ body {
 }
 
 .loading-facts h3 {
-  color: #4ecdc4;
+  color: #9e4ecd;
   margin-bottom: 0.5rem;
 }
 
@@ -889,4 +859,5 @@ body {
   .card-actions {
     flex-direction: column;
   }
+}
 }

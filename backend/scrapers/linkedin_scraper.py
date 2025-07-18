@@ -63,17 +63,14 @@ class LinkedInScraper:
             user_profile = UserProfile.query.filter_by(unique_persona_pulse_id=unique_persona_pulse_id).first()
             if user_profile:
                 user_profile.linkedin_id = linkedin_profile_url
-                user_profile.linkedin_about = about_section or headline  # Use headline if about is not available
+                user_profile.linkedin_about = about_section or headline or linkedin_profile_url  # Always store something
                 user_profile.linkedin_connections = connections
                 user_profile.last_updated = datetime.utcnow()
-                
                 db.session.commit()
-                
-                # Log success (even with limited data)
                 log = ScrapingLog(
                     unique_persona_pulse_id=unique_persona_pulse_id,
                     platform='linkedin',
-                    status='partial',  # Indicate limited data
+                    status='success' if (about_section or headline) else 'partial',
                     items_scraped=1 if (about_section or headline) else 0,
                     error_message='Limited public data available without authentication'
                 )

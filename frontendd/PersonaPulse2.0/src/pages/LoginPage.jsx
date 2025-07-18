@@ -9,7 +9,8 @@ const LoginPage = () => {
     instagram: '',
     twitter: '',
     linkedin: '',
-    reddit: ''
+    reddit: '',
+    social_trait: '' // New field
   });
   const [loading, setLoading] = useState(false);
   const [isSignup, setIsSignup] = useState(true);
@@ -28,17 +29,26 @@ const LoginPage = () => {
     setLoading(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Send social profile info and social_trait to backend
+      const res = await fetch('http://localhost:5000/api/users/dynamic_profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to process user');
       
-      // Login user
-      login(formData);
+      // Login user with returned unique_id and social info
+      const userData = {
+        ...formData,
+        unique_id: result.data.unique_persona_pulse_id
+      };
+      login(userData);
       
       // Navigate to loading page
       navigate('/loading');
     } catch (error) {
       console.error('Login error:', error);
-    } finally {
       setLoading(false);
     }
   };
@@ -150,6 +160,15 @@ const LoginPage = () => {
                 placeholder="u/username"
               />
             </div>
+          </div>
+
+          <div className="form-group">
+            <label>Social Personality Trait</label>
+            <select name="social_trait" value={formData.social_trait} onChange={handleChange} required>
+              <option value="">Select...</option>
+              <option value="extrovert">Extrovert</option>
+              <option value="introvert">Introvert</option>
+            </select>
           </div>
 
           <button type="submit" className="btn btn-primary btn-large" disabled={loading}>

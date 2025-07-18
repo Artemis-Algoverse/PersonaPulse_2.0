@@ -15,26 +15,22 @@ class InstagramScraper:
         
     def scrape_profile(self, instagram_username, unique_persona_pulse_id):
         """Scrape Instagram profile data (public data only)"""
+        bio = ''
+        hashtags = set()
+        followers = 0
+        following = 0
+        posts_data = []
         try:
-            # Get profile (public data only)
-            profile = instaloader.Profile.from_username(self.loader.context, instagram_username)
-            
-            # Extract basic info (only public data)
-            bio = profile.biography
-            followers = profile.followers
-            following = profile.followees
-            
-            # Get recent posts and hashtags (public posts only)
-            posts_data = []
-            hashtags = set()
-            
-            post_count = 0
+            # Try to get profile (public data only)
             try:
+                profile = instaloader.Profile.from_username(self.loader.context, instagram_username)
+                bio = profile.biography
+                followers = profile.followers
+                following = profile.followees
+                post_count = 0
                 for post in profile.get_posts():
-                    if post_count >= 20:  # Limit to recent 20 posts
+                    if post_count >= 20:
                         break
-                    
-                    # Only process if post is publicly accessible
                     if post.caption:
                         post_info = {
                             'caption': post.caption,
@@ -44,18 +40,13 @@ class InstagramScraper:
                             'hashtags': post.caption_hashtags if post.caption_hashtags else []
                         }
                         posts_data.append(post_info)
-                        
-                        # Collect hashtags
                         if post.caption_hashtags:
                             hashtags.update(post.caption_hashtags)
-                    
                     post_count += 1
-                    time.sleep(2)  # Rate limiting for public access
-                    
+                    time.sleep(2)
             except Exception as e:
-                logger.warning(f"Could not access posts for {instagram_username}: {str(e)}")
-                # Continue with profile data even if posts are not accessible
-            
+                logger.warning(f"Could not access Instagram API for {instagram_username}: {str(e)}")
+                # Try fallback scraping or leave bio empty
             # Update database
             user_profile = UserProfile.query.filter_by(unique_persona_pulse_id=unique_persona_pulse_id).first()
             if user_profile:
@@ -65,21 +56,22 @@ class InstagramScraper:
                 user_profile.insta_followers_count = followers
                 user_profile.insta_following_count = following
                 user_profile.last_updated = datetime.utcnow()
-                
                 db.session.commit()
-                
-                # Log success
                 log = ScrapingLog(
                     unique_persona_pulse_id=unique_persona_pulse_id,
                     platform='instagram',
-                    status='success',
+                    status='success' if bio else 'partial',
                     items_scraped=len(posts_data)
                 )
                 db.session.add(log)
                 db.session.commit()
+            return True
+        except Exception as e:
+            logger.error(f"Error scraping Instagram profile {instagram_username}: {str(e)}")
+            return False
                 
-                logger.info(f"Successfully scraped Instagram profile: {instagram_username}")
-                return True
+            # logger.info(f"Successfully scraped Instagram profile: {instagram_username}")
+            return True
                 
         except Exception as e:
             logger.error(f"Error scraping Instagram profile {instagram_username}: {str(e)}")

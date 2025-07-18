@@ -1,0 +1,118 @@
+body, .dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 50%, #fcb69f 100%);
+}
+
+.dashboard-header h1, .dashboard-header p {
+  text-align: center;
+  background: linear-gradient(90deg, #a18cd1, #fbc2eb, #fcb69f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.dashboard-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.tab-button {
+  background: linear-gradient(90deg, #a18cd1, #fbc2eb, #fcb69f);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.2s;
+}
+.tab-button.active {
+  box-shadow: 0 4px 20px rgba(241, 130, 141, 0.2);
+  transform: scale(1.05);
+}
+.tab-button:hover {
+  box-shadow: 0 2px 10px rgba(161, 140, 209, 0.2);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.profile-section, .recommendations-section, .insights-section {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.recommendation-card {
+  background: rgba(255,255,255,0.15);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px 0 rgba(161,140,209,0.15);
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 1px solid rgba(251,194,235,0.2);
+}
+.recommendation-card:hover {
+  transform: scale(1.04) translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(252,182,159,0.18);
+}
+.card-header h3 {
+  background: linear-gradient(90deg, #a18cd1, #fbc2eb, #fcb69f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.card-content p {
+  color: #6d597a;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.card-actions .btn-primary {
+  background: linear-gradient(90deg, #a18cd1, #fbc2eb, #fcb69f);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.2s;
+}
+.card-actions .btn-primary:hover {
+  box-shadow: 0 2px 10px rgba(241, 130, 141, 0.2);
+  transform: scale(1.05);
+}
+
+/* Subtle cursor animation */
+body {
+  cursor: url('https://cdn.jsdelivr.net/gh/Artemis-Algoverse/personapulse-cursors/pulse-cursor.png'), auto;
+  transition: background 0.5s;
+}
+.recommendation-card:hover, .tab-button:hover {
+  cursor: pointer;
+  animation: pulse 0.7s;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(252,182,159,0.7); }
+  70% { box-shadow: 0 0 20px 10px rgba(252,182,159,0.1); }
+  100% { box-shadow: 0 0 0 0 rgba(252,182,159,0); }
+}

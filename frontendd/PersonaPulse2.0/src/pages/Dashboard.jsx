@@ -5,7 +5,28 @@ import { useAuth } from '../context/AuthContext';
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  // State for extracted keywords
+  const [extractedKeywords, setExtractedKeywords] = useState('');
+
+  // Fetch extracted keywords for user
+  useEffect(() => {
+    async function fetchKeywords() {
+      if (user && user.unique_id) {
+        try {
+          const res = await fetch(`http://localhost:5000/api/users/${user.unique_id}/keywords`);
+          const data = await res.json();
+          setExtractedKeywords(data.keywords || '');
+        } catch (err) {
+          setExtractedKeywords('');
+        }
+      }
+    }
+    fetchKeywords();
+  }, [user]);
   const [activeTab, setActiveTab] = useState('profile');
+
+  // Center everything visually
+  // ...existing code...
 
   useEffect(() => {
     if (!user) {
@@ -38,41 +59,37 @@ const Dashboard = () => {
     neuroticism: 'You handle stress well and remain calm under pressure. You adapt quickly to changing situations.'
   };
 
-  const recommendations = [
-    {
-      id: 1,
-      title: 'Tech Innovation Summit 2024',
-      type: 'Technology Conference',
-      match: 92,
-      reason: 'Perfect for your high openness and extraversion',
-      date: '2024-08-15',
-      location: 'San Francisco, CA',
-      attendees: 500,
-      tags: ['Innovation', 'Technology', 'Networking']
-    },
-    {
-      id: 2,
-      title: 'Startup Networking Mixer',
-      type: 'Networking Event',
-      match: 87,
-      reason: 'Great for building professional connections',
-      date: '2024-07-22',
-      location: 'New York, NY',
-      attendees: 200,
-      tags: ['Startup', 'Networking', 'Business']
-    },
-    {
-      id: 3,
-      title: 'Creative Writing Workshop',
-      type: 'Workshop',
-      match: 78,
-      reason: 'Aligns with your creative and open personality',
-      date: '2024-07-30',
-      location: 'Online',
-      attendees: 50,
-      tags: ['Creative', 'Writing', 'Skills']
+  // Event recommendations fetched from backend
+  const [recommendations, setRecommendations] = useState([]);
+  const [loadingEvents, setLoadingEvents] = useState(false);
+  const [eventError, setEventError] = useState(null);
+  // Import API service
+  // ...existing code...
+  // Fetch recommended events using extracted keywords
+  const fetchEvents = async () => {
+    if (!extractedKeywords || extractedKeywords.trim() === '') {
+      setRecommendations([]);
+      setEventError('No keywords extracted from your profile. Please complete personality analysis.');
+      return;
     }
-  ];
+    setLoadingEvents(true);
+    setEventError(null);
+    try {
+      const keywords = extractedKeywords;
+      const { data } = await import('../services/APIService').then(mod => mod.matchEvents(keywords));
+      setRecommendations(data);
+    } catch (err) {
+      setEventError('Failed to fetch events');
+    }
+    setLoadingEvents(false);
+  };
+
+  useEffect(() => {
+    if (activeTab === 'recommendations') {
+      fetchEvents();
+    }
+    // eslint-disable-next-line
+  }, [activeTab, extractedKeywords]);
 
   const handleLogout = () => {
     logout();
@@ -96,17 +113,17 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <nav className="dashboard-nav">
-        <div className="nav-brand">
+      <nav className="dashboard-nav" style={{justifyContent:'center'}}>
+        <div className="nav-brand" style={{textAlign:'center', width:'100%'}}>
           <h2>PersonaPulse</h2>
         </div>
-        <div className="nav-user">
+        <div className="nav-user" style={{textAlign:'center', width:'100%'}}>
           <span>Welcome, {user.name}</span>
           <button onClick={handleLogout} className="btn btn-secondary">Logout</button>
         </div>
       </nav>
 
-      <div className="dashboard-header">
+      <div className="dashboard-header" style={{textAlign:'center', width:'100%'}}>
         <h1>Your Personality Profile</h1>
         <p>Discover insights about yourself and find perfect matches</p>
       </div>
@@ -187,34 +204,37 @@ const Dashboard = () => {
                 )}
               </div>
             </div>
+
+            <div className="profile-card">
+              <h2>Extracted Keywords from Your Profile</h2>
+              <div style={{marginTop:'1rem', fontWeight:'bold', color:'#a18cd1'}}>
+                {extractedKeywords ? extractedKeywords : 'No keywords found.'}
+              </div>
+            </div>
           </div>
         )}
 
         {activeTab === 'recommendations' && (
           <div className="recommendations-section">
             <h2>Recommended Events</h2>
+            <button className="btn btn-primary" style={{marginBottom:'1rem'}} onClick={fetchEvents}>Refresh</button>
+            {loadingEvents && <div>Loading events...</div>}
+            {eventError && <div style={{color:'red'}}>{eventError}</div>}
             <div className="recommendations-grid">
+              {recommendations.length === 0 && !loadingEvents && !eventError && (
+                <div>No events found.</div>
+              )}
               {recommendations.map((rec) => (
                 <div key={rec.id} className="recommendation-card">
                   <div className="card-header">
                     <h3>{rec.title}</h3>
-                    <span className="match-badge">{rec.match}% Match</span>
                   </div>
                   <div className="card-content">
-                    <p className="event-type">{rec.type}</p>
-                    <p className="event-date">📅 {rec.date}</p>
-                    <p className="event-location">📍 {rec.location}</p>
-                    <p className="event-attendees">👥 {rec.attendees} attendees</p>
-                    <p className="match-reason">{rec.reason}</p>
-                    <div className="event-tags">
-                      {rec.tags.map((tag, index) => (
-                        <span key={index} className="tag">{tag}</span>
-                      ))}
-                    </div>
+                    <p className="event-description">{rec.description}</p>
+                    <p className="event-keywords"><b>Keywords:</b> {rec.keywords}</p>
                   </div>
                   <div className="card-actions">
                     <button className="btn btn-primary">Learn More</button>
-                    <button className="btn btn-secondary">Save</button>
                   </div>
                 </div>
               ))}
